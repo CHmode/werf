@@ -63,6 +63,9 @@ jobs:
 
         # integration_k8s test binaries
         ./scripts/tests/precompilied_test_binaries.sh ./integration ./precompiled_test_binaries/integration_k8s --tags integration_k8s
+
+        # werf with coverage binary
+        ./scripts/tests/werf_with_coverage.sh
       shell: bash
 
     - name: Upload unit test binaries
@@ -82,6 +85,20 @@ jobs:
       with:
         name: "${{ matrix.os }}_integration_k8s_test_binaries"
         path: precompiled_test_binaries/integration_k8s
+
+    - name: Upload werf with coverage binary
+      uses: actions/upload-artifact@master
+      with:
+        name: "${{ matrix.os }}_werf_with_coverage"
+        path: bin/tests/werf_with_coverage
+      if: matrix.os != 'windows-latest'
+
+    - name: Upload werf with coverage binary
+      uses: actions/upload-artifact@master
+      with:
+        name: "${{ matrix.os }}_werf_with_coverage"
+        path: bin/tests/werf_with_coverage.exe
+      if: matrix.os == 'windows-latest'
 
   unit_tests:
     name: Unit tests
