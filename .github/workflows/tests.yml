@@ -133,7 +133,7 @@ jobs:
       run:
         for test_binary in $(find unit -type f -name '*.test' ); do
           filename=$(echo $test_binary | tr / _)_coverage.out
-          $test_binary -coverprofile=$WERF_TEST_COVERAGE_DIR/$filename \
+          $test_binary -test.coverprofile=$WERF_TEST_COVERAGE_DIR/$filename
         done
       shell: bash
 
