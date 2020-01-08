@@ -33,7 +33,9 @@ jobs:
     name: Download go modules
     strategy:
       fail-fast: false
-    runs-on: ubuntu-latest
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    runs-on: ${{ matrix.os }}
     if: github.event_name == 'schedule' || (github.event_name == 'pull_request' && github.event.label.id == 1745044226) # execute tests label
     steps:
 
@@ -46,40 +48,39 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v1
 
-    - name: Download modules
+    - name: Download go modules
       run: go mod download
       shell: bash
 
-    - name: integration test binaries
-      run: ./scripts/tests/precompilied_test_binaries.sh ./integration ./precompiled_test_binaries/integration --tags integration
-      shell: bash
-
-    - name: integration_k8s test binaries
-      run: ./scripts/tests/precompilied_test_binaries.sh ./integration ./precompiled_test_binaries/integration_k8s --tags integration_k8s
-      shell: bash
-
-    - name: unit test binaries
+    - name: Compile test binaries
       run: |
+        # unit test binaries
         ./scripts/tests/precompilied_test_binaries.sh ./cmd ./precompiled_test_binaries/unit/cmd
         ./scripts/tests/precompilied_test_binaries.sh ./pkg ./precompiled_test_binaries/unit/pkg
+
+        # integration test binaries
+        ./scripts/tests/precompilied_test_binaries.sh ./integration ./precompiled_test_binaries/integration --tags integration
+
+        # integration_k8s test binaries
+        ./scripts/tests/precompilied_test_binaries.sh ./integration ./precompiled_test_binaries/integration_k8s --tags integration_k8s
       shell: bash
 
-    - name: Upload unit binaries
+    - name: Upload unit test binaries
       uses: actions/upload-artifact@master
       with:
-        name: unit_binaries
+        name: ${{ matrix.os }}_unit_test_binaries
         path: precompiled_test_binaries/unit
 
-    - name: Upload integration binaries
+    - name: Upload integration test binaries
       uses: actions/upload-artifact@master
       with:
-        name: integration_binaries
+        name: ${{ matrix.os }}_integration_test_binaries
         path: precompiled_test_binaries/integration
 
-    - name: Upload integration k8s binaries
+    - name: Upload integration k8s test binaries
       uses: actions/upload-artifact@master
       with:
-        name: integration_k8s_binaries
+        name: ${{ matrix.os }}_integration_k8s_test_binaries
         path: precompiled_test_binaries/integration_k8s
 
   unit_tests:
@@ -88,7 +89,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
     runs-on: ${{ matrix.os }}
     steps:
 
@@ -101,7 +102,7 @@ jobs:
     - name: Download unit binaries
       uses: actions/download-artifact@master
       with:
-        name: unit_binaries
+        name: ${{ matrix.os }}_unit_test_binaries
         path: .
 
     - name: Prepare environment
@@ -114,8 +115,8 @@ jobs:
     - name: Test
       run:
         for test_binary in $(find unit -type f -name '*.test' ); do
-          filename=$(echo $test_binary | tr / _)_coverage.out;
-          $test_binary -coverprofile=$WERF_TEST_COVERAGE_DIR/$filename \;
+          filename=$(echo $test_binary | tr / _)_coverage.out
+          $test_binary -coverprofile=$WERF_TEST_COVERAGE_DIR/$filename \
         done
       shell: bash
 
