@@ -29,8 +29,8 @@ jobs:
         script: |
           github.issues.removeLabel({...context.issue, name: '${{github.event.label.name}}'})
 
-  download_go_modules:
-    name: Download go modules
+  compile_test_binaries:
+    name: Compile test binaries
     strategy:
       fail-fast: false
       matrix:
@@ -68,24 +68,24 @@ jobs:
     - name: Upload unit test binaries
       uses: actions/upload-artifact@master
       with:
-        name: ${{ matrix.os }}_unit_test_binaries
+        name: "${{ matrix.os }}_unit_test_binaries"
         path: precompiled_test_binaries/unit
 
     - name: Upload integration test binaries
       uses: actions/upload-artifact@master
       with:
-        name: ${{ matrix.os }}_integration_test_binaries
+        name: "${{ matrix.os }}_integration_test_binaries"
         path: precompiled_test_binaries/integration
 
     - name: Upload integration k8s test binaries
       uses: actions/upload-artifact@master
       with:
-        name: ${{ matrix.os }}_integration_k8s_test_binaries
+        name: "${{ matrix.os }}_integration_k8s_test_binaries"
         path: precompiled_test_binaries/integration_k8s
 
   unit_tests:
     name: Unit tests
-    needs: download_go_modules
+    needs: compile_test_binaries
     strategy:
       fail-fast: false
       matrix:
@@ -102,8 +102,8 @@ jobs:
     - name: Download unit binaries
       uses: actions/download-artifact@master
       with:
-        name: ${{ matrix.os }}_unit_test_binaries
-        path: .
+        name: "${{ matrix.os }}_unit_test_binaries"
+        path: unit
 
     - name: Prepare environment
       run: |
