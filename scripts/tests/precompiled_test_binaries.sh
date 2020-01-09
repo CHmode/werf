@@ -38,7 +38,6 @@ for package_path in $package_paths; do
   fi
 
   i=$((i+1))
-
   if [[ $i -eq 2 ]]; then
     break
   fi

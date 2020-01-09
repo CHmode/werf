@@ -131,7 +131,7 @@ jobs:
         mkdir -p $WERF_TEST_COVERAGE_DIR
         echo ::set-env name=WERF_TEST_COVERAGE_DIR::$WERF_TEST_COVERAGE_DIR
 
-        chmod -R +x ./{**,.}/*.test
+        find . -type f -iname "*.test" -exec chmod +x {} \;
       shell: bash
 
     - name: Test
@@ -186,7 +186,7 @@ jobs:
         go build github.com/onsi/ginkgo/ginkgo
 
         chmod +x werf_with_coverage
-        chmod -R +x integration/{**,.}/*.test
+        find integration -type f -iname "*.test" -exec chmod +x {} \;
       shell: bash
 
     - name: Test
@@ -243,7 +243,7 @@ jobs:
         go build github.com/onsi/ginkgo/ginkgo
 
         chmod +x werf_with_coverage
-        chmod -R +x integration/{**,.}/*.test
+        find integration -type f -iname "*.test" -exec chmod +x {} \;
 
         echo ::set-env name=WERF_TEST_K8S_BASE64_KUBECONFIG::$(printenv WERF_TEST_K8S_BASE64_KUBECONFIG_$(echo ${{ matrix.k8s_version }} | tr . _))
       shell: bash
@@ -311,7 +311,7 @@ jobs:
         go build github.com/onsi/ginkgo/ginkgo
 
         chmod +x werf_with_coverage
-        chmod -R +x integration/{**,.}/*.test
+        find integration -type f -iname "*.test" -exec chmod +x {} \;
       shell: bash
 
     - name: Test
@@ -359,7 +359,7 @@ jobs:
         go build github.com/onsi/ginkgo/ginkgo
 
         chmod +x werf_with_coverage
-        chmod -R +x integration/{**,.}/*.test
+        find integration -type f -iname "*.test" -exec chmod +x {} \;
 
         echo ::set-env name=WERF_TEST_K8S_BASE64_KUBECONFIG::$(printenv WERF_TEST_K8S_BASE64_KUBECONFIG_$(echo ${{ matrix.k8s_version }} | tr . _))
       shell: bash
