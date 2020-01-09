@@ -173,7 +173,7 @@ jobs:
       uses: actions/download-artifact@master
       with:
         name: "${{ matrix.os }}_werf_with_coverage"
-        path: werf_with_coverage
+        path: .
 
     - name: Prepare environment
       run: |
@@ -192,7 +192,7 @@ jobs:
       shell: bash
 
     - name: Test
-      run: WERF_TEST_WERF_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -keepGoing integration/{.,**}/*.test
+      run: WERF_TEST_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -keepGoing integration/{.,**}/*.test
       shell: bash
 
     - name: Upload coverage artifact
@@ -232,7 +232,7 @@ jobs:
       uses: actions/download-artifact@master
       with:
         name: "${{ matrix.os }}_werf_with_coverage"
-        path: werf_with_coverage
+        path: .
 
     - name: Prepare environment
       run: |
@@ -260,7 +260,7 @@ jobs:
     - name: Test
       run: |
         source ./scripts/ci/integration_k8s_tests_before_hook.sh
-        WERF_TEST_WERF_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -keepGoing integration/{.,**}/*.test
+        WERF_TEST_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -keepGoing integration/{.,**}/*.test
       shell: bash
       env:
         WERF_TEST_K8S_DOCKER_REGISTRY: ${{ secrets.WERF_TEST_K8S_DOCKER_REGISTRY }}
@@ -302,7 +302,7 @@ jobs:
       uses: actions/download-artifact@master
       with:
         name: "${{ matrix.os }}-latest_werf_with_coverage"
-        path: werf_with_coverage
+        path: .
 
     - name: Prepare environment
       run: |
@@ -317,7 +317,7 @@ jobs:
       shell: bash
 
     - name: Test
-      run: WERF_TEST_WERF_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -keepGoing integration/{.,**}/*.test
+      run: WERF_TEST_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -keepGoing integration/{.,**}/*.test
       shell: bash
 
   integration_k8s_tests_on_self_hosted_runners:
@@ -350,7 +350,7 @@ jobs:
       uses: actions/download-artifact@master
       with:
         name: "${{ matrix.os }}-latest_werf_with_coverage"
-        path: werf_with_coverage
+        path: .
 
     - name: Prepare environment
       run: |
@@ -376,7 +376,7 @@ jobs:
     - name: Test
       run: |
         source ./scripts/ci/integration_k8s_tests_before_hook.sh
-        WERF_TEST_WERF_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -keepGoing integration/{.,**}/*.test
+        WERF_TEST_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -keepGoing integration/{.,**}/*.test
       shell: bash
       env:
         WERF_TEST_K8S_DOCKER_REGISTRY: ${{ secrets.WERF_TEST_K8S_DOCKER_REGISTRY }}

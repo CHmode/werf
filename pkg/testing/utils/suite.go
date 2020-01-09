@@ -31,7 +31,7 @@ func GetTempDir() (string, error) {
 }
 
 func ProcessWerfBinPath() string {
-	path := os.Getenv("WERF_TEST_WERF_BINARY_PATH")
+	path := os.Getenv("WERF_TEST_BINARY_PATH")
 	if path == "" {
 		var err error
 		path, err = gexec.Build("github.com/flant/werf/cmd/werf")
