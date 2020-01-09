@@ -130,6 +130,8 @@ jobs:
         export WERF_TEST_COVERAGE_DIR=$GITHUB_WORKSPACE/tests_coverage/unit_tests/${{ matrix.os }}
         mkdir -p $WERF_TEST_COVERAGE_DIR
         echo ::set-env name=WERF_TEST_COVERAGE_DIR::$WERF_TEST_COVERAGE_DIR
+
+        chmod -R +x precompilied_test_binaries
       shell: bash
 
     - name: Test
@@ -182,6 +184,8 @@ jobs:
         ./scripts/ci/git.sh
 
         go build github.com/onsi/ginkgo/ginkgo
+
+        chmod -R +x precompilied_test_binaries
       shell: bash
 
     - name: Test
@@ -236,6 +240,8 @@ jobs:
         ./scripts/ci/git.sh
 
         go build github.com/onsi/ginkgo/ginkgo
+
+        chmod -R +x precompilied_test_binaries
 
         echo ::set-env name=WERF_TEST_K8S_BASE64_KUBECONFIG::$(printenv WERF_TEST_K8S_BASE64_KUBECONFIG_$(echo ${{ matrix.k8s_version }} | tr . _))
       shell: bash
@@ -302,7 +308,7 @@ jobs:
 
         go build github.com/onsi/ginkgo/ginkgo
 
-        ./scripts/ci/git.sh
+        chmod -R +x precompilied_test_binaries
       shell: bash
 
     - name: Test
@@ -349,7 +355,7 @@ jobs:
 
         go build github.com/onsi/ginkgo/ginkgo
 
-        ./scripts/ci/git.sh
+        chmod -R +x precompilied_test_binaries
 
         echo ::set-env name=WERF_TEST_K8S_BASE64_KUBECONFIG::$(printenv WERF_TEST_K8S_BASE64_KUBECONFIG_$(echo ${{ matrix.k8s_version }} | tr . _))
       shell: bash
