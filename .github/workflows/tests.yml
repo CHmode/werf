@@ -86,14 +86,14 @@ jobs:
         name: "${{ matrix.os }}_integration_k8s_test_binaries"
         path: precompiled_test_binaries/integration_k8s
 
-    - name: Upload werf with coverage binary
+    - name: Upload werf with coverage binary (ubuntu-latest, macOS-latest)
       uses: actions/upload-artifact@master
       with:
         name: "${{ matrix.os }}_werf_with_coverage"
         path: bin/tests/werf_with_coverage
       if: matrix.os != 'windows-latest'
 
-    - name: Upload werf with coverage binary
+    - name: Upload werf with coverage binary (windows-latest)
       uses: actions/upload-artifact@master
       with:
         name: "${{ matrix.os }}_werf_with_coverage"
