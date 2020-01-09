@@ -222,10 +222,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v1
 
-    - name: Download integration binaries
+    - name: Download integration k8s binaries
       uses: actions/download-artifact@master
       with:
-        name: "${{ matrix.os }}_integration_test_binaries"
+        name: "${{ matrix.os }}_integration_k8s_test_binaries"
         path: .
 
     - name: Download werf with coverage binary
@@ -304,7 +304,7 @@ jobs:
         name: "${{ matrix.os }}-latest_werf_with_coverage"
         path: .
 
-    - name: Prepare environment
+    - name: Prepare environment (macOS)
       run: |
         export WERF_TEST_COVERAGE_DIR=$GITHUB_WORKSPACE/tests_coverage/integration_k8s_tests/${{ matrix.os }}
         mkdir -p $WERF_TEST_COVERAGE_DIR
@@ -315,6 +315,20 @@ jobs:
         chmod +x werf_with_coverage
         find integration -type f -iname "*.test" -exec chmod +x {} \;
       shell: bash
+      if: matrix.os == 'macOS'
+
+    - name: Prepare environment (windows)
+      run: |
+        export WERF_TEST_COVERAGE_DIR=$GITHUB_WORKSPACE/tests_coverage/integration_k8s_tests/${{ matrix.os }}
+        mkdir -p $WERF_TEST_COVERAGE_DIR
+        echo ::set-env name=WERF_TEST_COVERAGE_DIR::$WERF_TEST_COVERAGE_DIR
+
+        go build github.com/onsi/ginkgo/ginkgo
+
+        chmod +x werf_with_coverage
+        find integration -type f -iname "*.test" -exec chmod +x {} \;
+      shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+      if: matrix.os == 'windows'
 
     - name: Test
       run: WERF_TEST_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -keepGoing integration/{.,**}/*.test
@@ -352,7 +366,7 @@ jobs:
         name: "${{ matrix.os }}-latest_werf_with_coverage"
         path: .
 
-    - name: Prepare environment
+    - name: Prepare environment (macOS)
       run: |
         export WERF_TEST_COVERAGE_DIR=$GITHUB_WORKSPACE/tests_coverage/integration_k8s_tests/${{ matrix.os }}
         mkdir -p $WERF_TEST_COVERAGE_DIR
@@ -372,6 +386,29 @@ jobs:
         WERF_TEST_K8S_BASE64_KUBECONFIG_1_14: ${{ secrets.WERF_TEST_K8S_BASE64_KUBECONFIG_1_14 }}
         WERF_TEST_K8S_BASE64_KUBECONFIG_1_15: ${{ secrets.WERF_TEST_K8S_BASE64_KUBECONFIG_1_15 }}
         WERF_TEST_K8S_BASE64_KUBECONFIG_1_16: ${{ secrets.WERF_TEST_K8S_BASE64_KUBECONFIG_1_16 }}
+      if: matrix.os == 'macOS'
+
+    - name: Prepare environment (windows)
+      run: |
+        export WERF_TEST_COVERAGE_DIR=$GITHUB_WORKSPACE/tests_coverage/integration_k8s_tests/${{ matrix.os }}
+        mkdir -p $WERF_TEST_COVERAGE_DIR
+        echo ::set-env name=WERF_TEST_COVERAGE_DIR::$WERF_TEST_COVERAGE_DIR
+if: matrix.os != 'windows'
+        go build github.com/onsi/ginkgo/ginkgo
+
+        chmod +x werf_with_coverage
+        find integration -type f -iname "*.test" -exec chmod +x {} \;
+
+        echo ::set-env name=WERF_TEST_K8S_BASE64_KUBECONFIG::$(printenv WERF_TEST_K8S_BASE64_KUBECONFIG_$(echo ${{ matrix.k8s_version }} | tr . _))
+      shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+      env:
+        WERF_TEST_K8S_BASE64_KUBECONFIG_1_11: ${{ secrets.WERF_TEST_K8S_BASE64_KUBECONFIG_1_11 }}
+        WERF_TEST_K8S_BASE64_KUBECONFIG_1_12: ${{ secrets.WERF_TEST_K8S_BASE64_KUBECONFIG_1_12 }}
+        WERF_TEST_K8S_BASE64_KUBECONFIG_1_13: ${{ secrets.WERF_TEST_K8S_BASE64_KUBECONFIG_1_13 }}
+        WERF_TEST_K8S_BASE64_KUBECONFIG_1_14: ${{ secrets.WERF_TEST_K8S_BASE64_KUBECONFIG_1_14 }}
+        WERF_TEST_K8S_BASE64_KUBECONFIG_1_15: ${{ secrets.WERF_TEST_K8S_BASE64_KUBECONFIG_1_15 }}
+        WERF_TEST_K8S_BASE64_KUBECONFIG_1_16: ${{ secrets.WERF_TEST_K8S_BASE64_KUBECONFIG_1_16 }}
+      if: matrix.os == 'windows'
 
     - name: Test
       run: |
