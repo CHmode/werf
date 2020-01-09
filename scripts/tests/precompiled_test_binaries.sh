@@ -39,5 +39,7 @@ for package_path in $package_paths; do
 
   i=$((i+1))
 
-  [[ $i -eq 2 ]] && break
+  if [[ $i -eq 2 ]]; then
+    break
+  fi
 done
