@@ -340,10 +340,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v1
 
-    - name: Download integration binaries
+    - name: Download integration k8s binaries
       uses: actions/download-artifact@master
       with:
-        name: "${{ matrix.os }}-latest_integration_test_binaries"
+        name: "${{ matrix.os }}-latest_integration_k8s_test_binaries"
         path: .
 
     - name: Download werf with coverage binary
