@@ -23,10 +23,10 @@ if ! [ -x "$(command -v upx)" ]; then
   fi
 fi
 
+i=0 # FIXME
 for package_path in $package_paths; do
-	test_binary_filename=$(echo "$package_path" | tr / _).test
-	test_binary_filename=${test_binary_filename:2}
-	test_binary_path="$test_binaries_output_dirname"/"$test_binary_filename"
+  test_binary_filename=$(basename -- "$package_path").test
+	test_binary_path="$test_binaries_output_dirname"/"$package_path"/"$test_binary_filename"
 	go test -ldflags="-s -w" --tags "dfrunmount dfssh $go_test_extra_tags" "$package_path" -coverpkg=./... -c -o "$test_binary_path"
 
   if [[ ! -f $test_binary_path ]]; then
@@ -36,4 +36,8 @@ for package_path in $package_paths; do
 	if [[ "$OSTYPE" == "linux-gnu" ]] || [[ "$OSTYPE" == "darwin"* ]]; then
 	  upx "$test_binary_path"
   fi
+
+  i=$((i+1))
+
+  [[ $i -eq 2 ]] && break
 done

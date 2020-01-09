@@ -1,9 +1,7 @@
 #!/bin/bash -e
 
-dir_with_test_binaries=${1:-precompiled_test_binaries}
-
-test_binaries=$(find "$dir_with_test_binaries" -type f -name '*.test' )
+test_binaries=$(find . -type f -name '*.test')
 for test_binary in $test_binaries; do
-  filename=$(echo "$test_binary" | tr / _)_coverage.out;
-  $test_binary -test.coverprofile=$WERF_TEST_COVERAGE_DIR/$filename;
+  coverage_file_name="$(date +%s.%N | sha256sum | cut -c 1-10)-$(date +%s)_coverage.out"
+  $test_binary -test.coverprofile="$WERF_TEST_COVERAGE_DIR"/"$coverage_file_name";
 done
