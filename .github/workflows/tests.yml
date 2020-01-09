@@ -279,7 +279,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macOS, windows]
+#        os: [macOS, windows]
+        os: [macOS]
     runs-on: [self-hosted, "${{ matrix.os }}"]
     steps:
 
@@ -326,7 +327,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macOS, windows]
+#        os: [macOS, windows]
+        os: [macOS]
         k8s_version: [1.11, 1.12, 1.13, 1.14, 1.15, 1.16]
     runs-on: [self-hosted, "${{ matrix.os }}"]
     steps:
