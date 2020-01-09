@@ -192,7 +192,7 @@ jobs:
       shell: bash
 
     - name: Test
-      run: WERF_TEST_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -timeout=24h0m0s -keepGoing integration/{.,**}/*.test
+      run: WERF_TEST_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -keepGoing integration/{.,**}/*.test
       shell: bash
 
     - name: Upload coverage artifact
@@ -260,7 +260,7 @@ jobs:
     - name: Test
       run: |
         source ./scripts/ci/integration_k8s_tests_before_hook.sh
-        WERF_TEST_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -timeout=24h0m0s -keepGoing integration/{.,**}/*.test
+        WERF_TEST_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -keepGoing integration/{.,**}/*.test
       shell: bash
       env:
         WERF_TEST_K8S_DOCKER_REGISTRY: ${{ secrets.WERF_TEST_K8S_DOCKER_REGISTRY }}
@@ -317,7 +317,7 @@ jobs:
       shell: bash
 
     - name: Test
-      run: WERF_TEST_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -timeout=24h0m0s -keepGoing integration/{.,**}/*.test
+      run: WERF_TEST_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -keepGoing integration/{.,**}/*.test
       shell: bash
 
   integration_k8s_tests_on_self_hosted_runners:
@@ -376,7 +376,7 @@ jobs:
     - name: Test
       run: |
         source ./scripts/ci/integration_k8s_tests_before_hook.sh
-        WERF_TEST_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -timeout=24h0m0s -keepGoing integration/{.,**}/*.test
+        WERF_TEST_BINARY_PATH=$GITHUB_WORKSPACE/werf_with_coverage ./ginkgo -p -keepGoing integration/{.,**}/*.test
       shell: bash
       env:
         WERF_TEST_K8S_DOCKER_REGISTRY: ${{ secrets.WERF_TEST_K8S_DOCKER_REGISTRY }}
