@@ -26,9 +26,14 @@ fi
 for package_path in $package_paths; do
 	test_binary_filename=$(echo "$package_path" | tr / _).test
 	test_binary_filename=${test_binary_filename:2}
-	go test -ldflags="-s -w" --tags "dfrunmount dfssh $go_test_extra_tags" "$package_path" -coverpkg=./... -c -o "$test_binaries_output_dirname"/"$test_binary_filename"
+	test_binary_path="$test_binaries_output_dirname"/"$test_binary_filename"
+	go test -ldflags="-s -w" --tags "dfrunmount dfssh $go_test_extra_tags" "$package_path" -coverpkg=./... -c -o "$test_binary_path"
+
+  if [[ ! -f $test_binary_path ]]; then
+     continue
+  fi
 
 	if [[ "$OSTYPE" == "linux-gnu" ]] || [[ "$OSTYPE" == "darwin"* ]]; then
-	  upx "$test_binaries_output_dirname"/"$test_binary_filename"
+	  upx "$test_binary_path"
   fi
 done
