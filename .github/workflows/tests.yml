@@ -55,14 +55,14 @@ jobs:
     - name: Compile test binaries
       run: |
         # unit test binaries
-        ./scripts/tests/precompilied_test_binaries.sh ./cmd ./precompiled_test_binaries/unit/cmd
-        ./scripts/tests/precompilied_test_binaries.sh ./pkg ./precompiled_test_binaries/unit/pkg
+        ./scripts/tests/precompiled_test_binaries.sh ./cmd ./precompiled_test_binaries/unit/cmd
+        ./scripts/tests/precompiled_test_binaries.sh ./pkg ./precompiled_test_binaries/unit/pkg
 
         # integration test binaries
-        ./scripts/tests/precompilied_test_binaries.sh ./integration ./precompiled_test_binaries/integration --tags integration
+        ./scripts/tests/precompiled_test_binaries.sh ./integration ./precompiled_test_binaries/integration --tags integration
 
         # integration_k8s test binaries
-        ./scripts/tests/precompilied_test_binaries.sh ./integration ./precompiled_test_binaries/integration_k8s --tags integration_k8s
+        ./scripts/tests/precompiled_test_binaries.sh ./integration ./precompiled_test_binaries/integration_k8s --tags integration_k8s
 
         # werf with coverage binary
         ./scripts/tests/werf_with_coverage.sh
@@ -123,7 +123,7 @@ jobs:
       uses: actions/download-artifact@master
       with:
         name: "${{ matrix.os }}_unit_test_binaries"
-        path: precompilied_test_binaries
+        path: precompiled_test_binaries
 
     - name: Prepare environment
       run: |
@@ -131,11 +131,11 @@ jobs:
         mkdir -p $WERF_TEST_COVERAGE_DIR
         echo ::set-env name=WERF_TEST_COVERAGE_DIR::$WERF_TEST_COVERAGE_DIR
 
-        chmod -R +x precompilied_test_binaries
+        chmod -R +x precompiled_test_binaries
       shell: bash
 
     - name: Test
-      run: ./scripts/ci/unit_test_runner.sh precompilied_test_binaries
+      run: ./scripts/ci/unit_test_runner.sh precompiled_test_binaries
       shell: bash
 
     - name: Upload coverage artifact
@@ -167,7 +167,7 @@ jobs:
       uses: actions/download-artifact@master
       with:
         name: "${{ matrix.os }}_integration_test_binaries"
-        path: precompilied_test_binaries
+        path: precompiled_test_binaries
 
     - name: Download werf with coverage binary
       uses: actions/download-artifact@master
@@ -185,7 +185,7 @@ jobs:
 
         go build github.com/onsi/ginkgo/ginkgo
 
-        chmod -R +x precompilied_test_binaries
+        chmod -R +x precompiled_test_binaries
       shell: bash
 
     - name: Test
@@ -223,7 +223,7 @@ jobs:
       uses: actions/download-artifact@master
       with:
         name: "${{ matrix.os }}_integration_test_binaries"
-        path: precompilied_test_binaries
+        path: precompiled_test_binaries
 
     - name: Download werf with coverage binary
       uses: actions/download-artifact@master
@@ -241,7 +241,7 @@ jobs:
 
         go build github.com/onsi/ginkgo/ginkgo
 
-        chmod -R +x precompilied_test_binaries
+        chmod -R +x precompiled_test_binaries
 
         echo ::set-env name=WERF_TEST_K8S_BASE64_KUBECONFIG::$(printenv WERF_TEST_K8S_BASE64_KUBECONFIG_$(echo ${{ matrix.k8s_version }} | tr . _))
       shell: bash
@@ -292,7 +292,7 @@ jobs:
       uses: actions/download-artifact@master
       with:
         name: "${{ matrix.os }}-latest_integration_test_binaries"
-        path: precompilied_test_binaries
+        path: precompiled_test_binaries
 
     - name: Download werf with coverage binary
       uses: actions/download-artifact@master
@@ -308,7 +308,7 @@ jobs:
 
         go build github.com/onsi/ginkgo/ginkgo
 
-        chmod -R +x precompilied_test_binaries
+        chmod -R +x precompiled_test_binaries
       shell: bash
 
     - name: Test
@@ -339,7 +339,7 @@ jobs:
       uses: actions/download-artifact@master
       with:
         name: "${{ matrix.os }}-latest_integration_test_binaries"
-        path: precompilied_test_binaries
+        path: precompiled_test_binaries
 
     - name: Download werf with coverage binary
       uses: actions/download-artifact@master
@@ -355,7 +355,7 @@ jobs:
 
         go build github.com/onsi/ginkgo/ginkgo
 
-        chmod -R +x precompilied_test_binaries
+        chmod -R +x precompiled_test_binaries
 
         echo ::set-env name=WERF_TEST_K8S_BASE64_KUBECONFIG::$(printenv WERF_TEST_K8S_BASE64_KUBECONFIG_$(echo ${{ matrix.k8s_version }} | tr . _))
       shell: bash
