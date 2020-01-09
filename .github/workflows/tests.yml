@@ -393,7 +393,7 @@ jobs:
         export WERF_TEST_COVERAGE_DIR=$GITHUB_WORKSPACE/tests_coverage/integration_k8s_tests/${{ matrix.os }}
         mkdir -p $WERF_TEST_COVERAGE_DIR
         echo ::set-env name=WERF_TEST_COVERAGE_DIR::$WERF_TEST_COVERAGE_DIR
-if: matrix.os != 'windows'
+
         go build github.com/onsi/ginkgo/ginkgo
 
         chmod +x werf_with_coverage
